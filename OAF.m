@@ -1,49 +1,55 @@
-%OSCILADOR AMORTECIDO FOR«ADO
-
+%-----------------------------------------%
+%   UNIVERSIDADE FEDERAL DE MATO GROSSO   %
+%           INSTITUTO DE F√çSICA           %
+%           F√çSICA COMPUTACIONAL          %
+%        Aluno: Rafael Alves Dumer        %
+%                                         &    
+%      OSCILADOR AMORTECIDO FOR√áADO       % 
+%-----------------------------------------%
 clc
 clear
 clf
 close all
 
-%primeira configuraÁ„o: b=-0.1
-%segunda configuraÁ„o: b=+0.1
-%terceira configuraÁ„o: b=0
+%primeira configura√ß√£o: b=-0.1
+%segunda configura√ß√£o: b=+0.1
+%terceira configura√ß√£o: b=0
 
 m=1;              %massa do objeto (Kg)
 k=5;              %constante elastica da mola (N/m)
-b=0;              %constante da forÁa de atrito/arrasto (N/(m/s))
-F=10;             %forÁa impulsionadora (N)
+b=0;              %constante da for√ßa de atrito/arrasto (N/(m/s))
+F=10;             %for√ßa impulsionadora (N)
 
 w20=sqrt(k./m);   %frequencia angular caracteristica sem amortecimento
 
 B = b./(2.*m);    %parametro de amortecimento
 
 A = F./m;         %paramentro de impulso
-w=5;              %frequencia angular da forÁa de impuls„o
+w=5;              %frequencia angular da for√ßa de impuls√£o
 
 
-A1 = 0.5;         %amplitude positiva da soluÁ„o analitica     
-A2 = 0.5;         %amplitude negativa da soluÁ„o analitica
+A1 = 0.5;         %amplitude positiva da solu√ß√£o analitica     
+A2 = 0.5;         %amplitude negativa da solu√ß√£o analitica
 
-%funÁ„o para a velocidade (dx/dt) = z
+%fun√ß√£o para a velocidade (dx/dt) = z
 f = @(z) z;       
-%funÁ„o para a derivada da velocidade (dz/dt)
+%fun√ß√£o para a derivada da velocidade (dz/dt)
 x = @(x,z,t) -2.*B.*z - w20.*x + A.*cos(w.*t);
 
-%funÁ„o oscilador amortecido
+%fun√ß√£o oscilador amortecido
 g = @(x,z) -2.*B.*z - w20.*x;
-%funÁ„o impulso
+%fun√ß√£o impulso
 Forca = @(t) A.*cos(w.*t);
 
-%SoluÁ„o analitica = SoluÁ„o complementar + SoluÁ„o particular;
+%Solu√ß√£o analitica = Solu√ß√£o complementar + Solu√ß√£o particular;
 %oscilador amortecido
 Sc = @(t) exp(-B.*t).*(A1.*exp(sqrt((B.^2)-(w20.^2)).*t) + A2.*exp(-sqrt((B.^2)-(w20.^2)).*t));
-%forÁa de impuls„o externa
+%for√ßa de impuls√£o externa
 del = atan((2.*w.*B)./((w20.^2) - (w.^2)));
 Sp = @(t) (A./sqrt(((w20.^2) - (w.^2)).^2 + (4.*(w.^2).*(B.^2)))).*cos(w.*t - del);
-%posiÁ„o
+%posi√ß√£o
 a = @(t) Sc(t) + Sp(t);
-%velocidade analitiva derivada da posiÁ„o
+%velocidade analitiva derivada da posi√ß√£o
 %primeira parte da derivada de Sc
 DelSc1 = @(t) (-B.*exp(-B.*t).*(A1.*exp(sqrt((B.^2)-(w20^2)).*t) + A2.*exp(-sqrt((B.^2)-(w20^2)).*t)));
 %segunda parte da derivada de Sc
@@ -54,34 +60,34 @@ DelSp1 = @(t) ((-A.*w.*sin(w.*t - del))./(sqrt(((w20.^2) - (w.^2)).^2 + (4.*(w.^
 Va= @(t) DelSc1(t) + DelSc2(t) + DelSp1(t);
 
 ind = 1; 
-%condiÁıes iniciais da soluÁ„o analitica
+%condi√ß√µes iniciais da solu√ß√£o analitica
 matriza(ind) = a(0);
 matrizSc(ind) = Sc(0);
 matrizSp(ind) = Sp(0);
 matrizVa(ind) = Va(0);
 
-%condiÁıes iniciais do mÈtodo, igualadas com a analitica
+%condi√ß√µes iniciais do m√©todo, igualadas com a analitica
 z0 = Va(0);           %velocidade inicial
-x0 = a(0);            %posiÁ„o inicial
-F0 = Sp(0);           %ForÁa impulcionadora inicial
-z10= Va(0);           %velocidade inicial para a soluÁ„o amortecida
-g0 = a(0);            %soluÁ„o temporaria/amortecido
+x0 = a(0);            %posi√ß√£o inicial
+F0 = Sp(0);           %For√ßa impulcionadora inicial
+z10= Va(0);           %velocidade inicial para a solu√ß√£o amortecida
+g0 = a(0);            %solu√ß√£o temporaria/amortecido
 
 t0 = 0;               %tempo inicial
 dt = 0.1;             %passo do tempo
 tn = 50;              %tempo final
 
 
-oscilacoesF = tn/(2.*pi./w)
+oscilacoesF = tn/(2.*pi./w);
 
-%adicionando condiÁıes as respectivas matrizes linha de dados;   
+%adicionando condi√ß√µes as respectivas matrizes linha de dados;   
 matrizz(ind) = z0;
 matrizx(ind) = x0;
 matrizt(ind) = t0;
 matrizg(ind) = g0;
 matrizF(ind) = F0;
 
-%loop para mÈtodo Runge-Kutta de quarta ordem para a EDO de segunda ordem
+%loop para m√©todo Runge-Kutta de quarta ordem para a EDO de segunda ordem
 for i = t0:dt:tn
   
 ind = ind+1;
@@ -106,17 +112,17 @@ l3 = dt.*g((g0+(k2.*0.5)),(z10+(l2.*0.5)));
 k4 = dt.*f(z10+l3);
 l4 = dt.*g((g0+k3),(z10+l3));
 
-%runge-kutta para forÁa de impulso
+%runge-kutta para for√ßa de impulso
 F1 = dt.*Forca(t0);
 F2 = dt.*Forca((t0+(dt.*0.5)));
 F3 = dt.*Forca((t0+(dt.*0.5)));
 F4 = dt.*Forca((t0+dt));
 
 zn = z0 + (1./6).*(x1 + 2.*x2 + 2.*x3 + x4); %velocidade amortecido+impulso
-xn = x0 + (1./6).*(f1 + 2.*f2 + 2.*f3 + f4); %posiÁ„o amortecido+impulso 
+xn = x0 + (1./6).*(f1 + 2.*f2 + 2.*f3 + f4); %posi√ß√£o amortecido+impulso 
 z1n= z10+ (1./6).*(l1 + 2.*l2 + 2.*l3 + l4); %velocidade amortecido 
-gn = g0 + (1./6).*(k1 + 2.*k2 + 2.*k3 + k4); %posiÁ„o amortecido 
-Fn = F0 + (1./6).*(F1 + 2.*F2 + 2.*F3 + F4); %forÁa de impuls„o externa
+gn = g0 + (1./6).*(k1 + 2.*k2 + 2.*k3 + k4); %posi√ß√£o amortecido 
+Fn = F0 + (1./6).*(F1 + 2.*F2 + 2.*F3 + F4); %for√ßa de impuls√£o externa
 tn = t0 + dt;
 
 z0 = zn;
@@ -139,25 +145,25 @@ matrizVa(ind) = Va(i+dt);
 
 endfor
 
-%PoincarÈ
-matPCx(1) = 0;    %dados PoincarÈ eixo x analitico
-matPCy(1) = 0;    %dados PoincarÈ eixo y analitico
-matPCmx(1) = 0    %dados PoincarÈ eixo x RK4
-matPCmy(1) = 0    %dados PoincarÈ eixo y RK4
+%Poincar√©
+matPCx(1) = 0;    %dados Poincar√© eixo x analitico
+matPCy(1) = 0;    %dados Poincar√© eixo y analitico
+matPCmx(1) = 0;   %dados Poincar√© eixo x RK4
+matPCmy(1) = 0;   %dados Poincar√© eixo y RK4
 %indices
 ond = 0;
 und = -1;
 ant = 0;
-%limitador do loop para n„o passar a quantidade de dados
-tnn = oscilacoesF-2.*pi
-%loop para capturar ponto no periodo de oscilaÁ„o da forÁa externa
+%limitador do loop para n√£o passar a quantidade de dados
+tnn = oscilacoesF-2.*pi;
+%loop para capturar ponto no periodo de oscila√ß√£o da for√ßa externa
 for j = (2.*pi./w):(2.*pi./w):tnn
 und = und+1;
-%loop de contagem para captar dados da posiÁ„o ond
+%loop de contagem para captar dados da posi√ß√£o ond
 for k = ((2.*pi./w).*und):dt:j
 ond = ond+1;
 endfor
-%armazenando ponto capturado na matriz de dados de PoincarÈ
+%armazenando ponto capturado na matriz de dados de Poincar√©
 ant = ant+1;
 matPCx(ant) = matriza(ond);
 matPCy(ant) = matrizVa(ond);
@@ -186,7 +192,7 @@ ylabel('v(t)');
 title('Diagrama de fase bidimensional analitico');
 
 figure
-%plotar posiÁ„o em funÁ„o do tempo
+%plotar posi√ß√£o em fun√ß√£o do tempo
 subplot(2,1,1);
 plot(matrizt,matrizx);
 hold on
@@ -195,8 +201,8 @@ hold on
 plot(matrizt,matrizF,'y-');
 xlabel('t');
 ylabel('x(t)');
-legend('amortecido forÁado','amorteciemnto','forÁa');
-title('PosiÁ„o do oscilador RK4');
+legend('amortecido for√ßado','amorteciemnto','for√ßa');
+title('Posi√ß√£o do oscilador RK4');
 subplot(2,1,2);
 plot(matrizt,matriza);
 hold on
@@ -205,19 +211,19 @@ hold on
 plot(matrizt,matrizSp,'y-');
 xlabel('t');
 ylabel('x(t)');
-legend('amortecido forÁado','amorteciemnto','forÁa');
-title('PosiÁ„o do oscilador analitico');
+legend('amortecido for√ßado','amorteciemnto','for√ßa');
+title('Posi√ß√£o do oscilador analitico');
 
 figure
-%plotar seÁ„o de PoincarÈ
+%plotar se√ß√£o de Poincar√©
 subplot(2,1,1)
 plot(matPCmx,matPCmy,'g*');
 xlabel('x(t)');ylabel('v(t)');
-title('SeÁ„o de PoincarÈ RK4');
+title('Se√ß√£o de Poincar√© RK4');
 subplot(2,1,2)
 plot(matPCx,matPCy,'k*');
 xlabel('x(t)');ylabel('v(t)');
-title('SeÁ„o de PoincarÈ analitico');
+title('Se√ß√£o de Poincar√© analitico');
 
 
 
