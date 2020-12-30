@@ -98,9 +98,9 @@ x1 = dt.*x(x0,z0,t0);
 f2 = dt.*f(z0+(x1.*0.5));
 x2 = dt.*x((x0+(f1.*0.5)),(z0+(x1.*0.5)),(t0+(dt.*0.5)));
 f3 = dt.*f(z0+(x2.*0.5));
-x3 = dt.*g((x0+(f2.*0.5)),(z0+(x2.*0.5)),(t0+(dt.*0.5)));
+x3 = dt.*x((x0+(f2.*0.5)),(z0+(x2.*0.5)),(t0+(dt.*0.5)));
 f4 = dt.*f(z0+x3);
-x4 = dt.*g((x0+f3),(z0+x3),(t0+dt));
+x4 = dt.*x((x0+f3),(z0+x3),(t0+dt));
 
 %runge-kutta para oscilador amortecido
 k1 = dt.*f(z10);
